@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Guest\HomeController as GuestHomeController;
 
 use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\MockObject\Rule\Parameters;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +24,27 @@ Route::get('/', [GuestHomeController::class, 'index']);
 
 Route::get('/home', [AdminHomeController::class, 'index'])->middleware(['auth'])->name('home');
 
+//Si fa cosi per il singolo url. Slug si usa sul frontffice, per leggere meglio l'url, per permettere il google d'indirizzarlo. Sul backoffice si usa l'id
+// Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->middleware(['auth'])->name('custom.show'); 
+
+
 Route::middleware('auth')
-    ->prefix('profile') // * titti gli url hanno il prefisso "/profile"
+    ->prefix('/admin') 
+    ->name('admin.')
+    ->group(function() {
+        Route::resource('projects', ProjectController::class)
+        // -›except ([' index' ]);
+        // -›only (['show', 'create', 'store', 'edit', 'update', 'destroy']);
+            ->parameters(['projects' => 'project:slug']); // si usa il slug al posto di id
+    });
+
+
+Route::middleware('auth')
+    ->prefix('/profile') // * titti gli url hanno il prefisso "/profile"
     ->name('profile.') // * tutti i nomi delle route hanno il prefisso "profile"
     ->group(function () {
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');
-    Route::patch('/', [ProfileController::class, 'update'])->name('.update');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
