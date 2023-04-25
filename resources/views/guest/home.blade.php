@@ -12,7 +12,7 @@
                 <div class="card-header">{{ __('User Dashboard') }}</div>
 
                 <div class="card-body">
-                  Guest
+                  Welcome Guest!
                 </div>
             </div>
         </div>
