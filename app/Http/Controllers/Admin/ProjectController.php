@@ -13,11 +13,18 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->has('term')) {
+            $term = $request->get('term');
+            $projects = Project::where('title', 'LIKE', "%$term%")->paginate(8)->withQueryString();
+        }else {
+             $projects = Project::paginate(8);
+        }
+       
+        return view('admin.projects.index', compact('projects'));
     }
-
+ 
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +32,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+            return view('admin.projects.create');
     }
 
     /**
@@ -36,7 +43,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+
+        $project = new Project;
+        $project->fill($request->all);
     }
 
     /**
@@ -47,7 +57,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
