@@ -24,7 +24,7 @@
             {{-- <th scope="col">Slug</th> --}}
             <th scope="col">Image</th>
             <th scope="col">Text</th>
-            {{-- <th scope="col">Link</th> --}}
+            <th scope="col">Link</th>
             <th scope="col">Action</th>
           </tr>
           </tr>
@@ -37,7 +37,7 @@
             {{-- <td>{{ $project->slug }}</td> --}}
             <td>{{ $project->image }}</td>
             <td>{{ $project->getAbstract() }}</td>
-            {{-- <td>{{ $project->link }}</td> --}}
+            <td>{{ $project->link }}</td>
             <td class="action-cell">
               <a href="{{route('admin.projects.show', $project)}}"><i class="bi bi-eye"></i></a>
               {{-- <td><a href="{{route('projects.show', ['project'=$project->id])}}"><i class="bi bi-eye"></i></a></td> --}}
@@ -61,26 +61,26 @@
 @section('modals')
   @forelse ($projects as $project)
     <!-- Modal -->
-    <div class="modal fade" id="delete-modal-{{ $project->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+    <div class="modal modal-lg fade" id="delete-modal-{{ $project->id }}" tabindex="-1" aria-labelledby="delete-modal-{{ $project->id }}" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Conferma eliminazione !</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Conferma eliminazione!</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body text-start">
-            Sei sicuro di voler eliminare la canzone {{ $project->title }} di {{ $project->author }} con ID - {{ $project->id }} selezionato? <br>
+            Sei sicuro di voler eliminare il progetto "{{ $project->title }}" con ID "{{ $project->id }}"? <br>
             L'operazione non è reversibile.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
             
-            {{-- <form action="{{ route('projects.destroy', $project)}}" method="POST">
+            <form action="{{ route('admin.projects.destroy', $project)}}" method="POST">
                 @method('delete')
                 @csrf 
                 
                 <button type="submit" class="btn btn-danger">Elimina</button>
-            </form> --}}
+            </form>
           </div>
         </div>
       </div>
