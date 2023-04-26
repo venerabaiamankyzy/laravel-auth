@@ -13,7 +13,7 @@
   <section class="card">
     <div class="card-body">
      
-      <form action="{{ route('admin.projects.store')}}" method="POST" class="row gy-4 gx-5 ">
+      <form action="{{ route('admin.projects.store')}}" enctype="multipart/form-data" method="POST" class="row gy-4 gx-5 ">
         @csrf
         <div class="col-6">
           <label for="title"  class="form-label me-4">Title</label>
