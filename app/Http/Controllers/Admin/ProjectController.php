@@ -17,14 +17,17 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        
         if($request->has('term')) {
             $term = $request->get('term');
             $projects = Project::where('title', 'LIKE', "%$term%")->paginate(8)->withQueryString();
         }else {
-             $projects = Project::orderBy('updated_at', 'DESC')->paginate(8);
+            $sort = (!empty($sort_request = $request->get('sort'))) ? $sort_request : "updated_at"; 
+            $order = (!empty($order_request = $request->get('order'))) ? $order_request : "DESC"; 
+             $projects = Project::orderBy($sort, 'DESC')->paginate(8)->withQueryString();
         }
        
-        return view('admin.projects.index', compact('projects'));
+        return view('admin.projects.index', compact('projects', 'sort', 'order'));
     }
  
     /**

@@ -16,35 +16,124 @@
       <input class="form-control me-sm-2" type="search" name="term" placeholder="Search">
       <button class="btn btn-outline-success my-0" type="submit">Search</button>
     </form>   
+
+    {{-- @dump($sort) --}}
+    
       <table class="table table-striped table-hover p-4 ">
+
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Title</th>
-            {{-- <th scope="col">Slug</th> --}}
-            <th scope="col">Image</th>
-            <th scope="col">Text</th>
-            <th scope="col">Link</th>
-            <th scope="col">Action</th>
-          </tr>
-          </tr>
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=id&order={{ $sort == 'id' && $order != 'DESC' ? 'DESC' : 'ASC' }}">ID
+                @if ($sort == 'id')
+                  <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=title&order={{ $sort == 'title' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Title
+                @if ($sort == 'title')
+                  <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            {{-- <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=slug&order={{ $sort == 'slug' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Slug
+                @if ($sort == 'slug')
+                  <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th> --}}
+
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=image&order={{ $sort == 'image' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Image
+                @if ($sort == 'image')
+                  <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=text&order={{ $sort == 'text' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Text
+                @if ($sort == 'text')
+                  <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            {{-- <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=link&order={{ $sort == 'link' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Link
+                @if ($sort == 'link')
+                <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th> --}}
+
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=created_at&order={{ $sort == 'created_at' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Created 
+                @if ($sort == 'created_at')
+                <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            <th scope="col">
+              <a 
+                href="{{ route('admin.projects.index') }}?sort=updated_at&order={{ $sort == 'updated_at' && $order != 'DESC' ? 'DESC' : 'ASC' }}">Last edit
+                @if ($sort == 'updated_at')
+                <i class="bi bi-arrow-down d-inline-block @if($order == 'DESC') rotate-180 @endif"></i>
+                @endif
+              </a>
+            </th>
+
+            
+
+            <th scope="col">
+              Action
+            </th>         
+
+            
+
+          </tr>         
         </thead>
+
         <tbody>
           @forelse ($projects as $project)
           <tr>
             <th scope="row">{{$project->id}}</th>
-            <td>{{ $project->title }}</td>
+            <td>{{ $project->getTitle(10) }}</td>
             {{-- <td>{{ $project->slug }}</td> --}}
             <td>{{ $project->image }}</td>
-            <td>{{ $project->getAbstract() }}</td>
-            <td>{{ $project->link }}</td>
+            <td>{{ $project->getAbstract(15) }}</td>
+            {{-- <td>{{ $project->link }}</td> --}}
+            <td>{{ $project->created_at }}</td>
+            <td>{{ $project->updated_at }}</td>
+            
+
             <td class="action-cell">
-              <a href="{{route('admin.projects.show', $project)}}"><i class="bi bi-eye"></i></a>
+              <a 
+                href="{{route('admin.projects.show', $project)}}">
+                <i class="bi bi-eye"></i>
+              </a>
               {{-- <td><a href="{{route('projects.show', ['project'=$project->id])}}"><i class="bi bi-eye"></i></a></td> --}}
 
-              <a href="{{ route('admin.projects.edit', $project)}}"><i class="bi bi-pencil"></i></a>
+              <a 
+                href="{{ route('admin.projects.edit', $project)}}">
+                <i class="bi bi-pencil"></i>
+              </a>
 
-              <button class="bi bi-trash3 text-danger btn-icon" data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $project->id }}"></button> 
+              <button 
+                class="bi bi-trash3 text-danger btn-icon" data-bs-toggle="modal" data-bs-target="#delete-modal-{{ $project->id }}">
+              </button> 
               
             </td>   
           </tr>   
