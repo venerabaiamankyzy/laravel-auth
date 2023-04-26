@@ -13,7 +13,6 @@
       <img src="{{ $project->image}}" alt="" width="300" class="float-start ms-4 me-4" >
       <figcaption class="px-5">{{ $project->title}}</figcaption>
       <p>{{ $project->slug}}</p>
-      <p>{{ $project->slug}}</p>
       <p>{{ $project->link}}</p>
       <p>{{ $project->text}}</p>
   </figure>
