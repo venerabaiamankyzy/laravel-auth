@@ -43,3 +43,17 @@ main {
     width: calc(100% - 300px);
     overflow-y: auto;
 }
+
+.action-cell {
+    display: flex;
+    justify-content: flex-start;
+    text-align: right;
+    gap: 0 10px;
+}
+
+.btn-icon {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
