@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class ProjectController extends Controller
 {
@@ -19,7 +21,7 @@ class ProjectController extends Controller
             $term = $request->get('term');
             $projects = Project::where('title', 'LIKE', "%$term%")->paginate(8)->withQueryString();
         }else {
-             $projects = Project::paginate(8);
+             $projects = Project::orderBy('updated_at', 'DESC')->paginate(8);
         }
        
         return view('admin.projects.index', compact('projects'));
@@ -46,7 +48,12 @@ class ProjectController extends Controller
         // dd($request->all());
 
         $project = new Project;
-        $project->fill($request->all);
+        $project->fill($request->all());
+        $project->slug = Project::generateSlug($project->title);
+        // $project->slug = $project->id . '-' . Str::of($project->title)->slug('-');
+        $project->save();
+
+        return to_route('admin.projects.show', $project);
     }
 
     /**
@@ -68,7 +75,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -80,7 +87,12 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        // $project->update($request->all()); // riempe e salva
+        $project->fill($request->all()); // solo riempe senza salvare
+        $project->slug = Project::generateSlug($project->title);
+        $project->save();
+
+        return to_route('admin.projects.show', $project); 
     }
 
     /**
@@ -91,6 +103,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        // $project = Project::findOrFail($id);
+        $project->delete();
+
+        return to_route('admin.projects.index');        
+        // return redirect()->route('admin.projects.index');
     }
-}
+} 
