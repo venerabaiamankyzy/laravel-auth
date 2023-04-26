@@ -6,6 +6,7 @@ use GuzzleHttp\Handler\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 class Project extends Model
 {
@@ -15,6 +16,10 @@ class Project extends Model
 
     public function getAbstract($max = 50) {
         return substr($this->text, 0, $max). "...";
+    }
+
+    public function getTitle($max = 50) {
+        return substr($this->title, 0, $max). "...";
     }
 
     public static function generateSlug($title) {
@@ -35,4 +40,16 @@ class Project extends Model
         
         return $possible_slug;
     }
-}
+
+    protected function getUpdatedAtAttribute($value) {
+        return date('d/m/Y H:i', strtotime($value));
+    }
+
+    protected function getCreatedAtAttribute($value) {
+        return date('d/m/Y H:i', strtotime($value));
+    }
+
+    // protected function getCreatedAtAttribute($value) {
+    //     return date('d/m/Y H:i:s', strtotime($value));
+    // }
+} 

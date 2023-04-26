@@ -4,6 +4,14 @@ body {
     background-color: #eee;
 }
 
+a {
+    text-decoration: none;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
 .navbar {
     height: 100vh;
     width: 250px;
