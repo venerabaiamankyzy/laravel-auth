@@ -18,7 +18,7 @@
     </form>   
 
     {{-- @dump($sort) --}}
-    
+    <div class="card p-3">
       <table class="table table-striped table-hover p-4 ">
 
         <thead>
@@ -140,7 +140,9 @@
           @empty  
           @endforelse 
         </tbody>
-      </table>     
+      </table>  
+    </div>
+         
     {{ $projects->links('')}}    
    
 </section>
