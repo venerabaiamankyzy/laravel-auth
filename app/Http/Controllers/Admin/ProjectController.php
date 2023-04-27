@@ -50,13 +50,31 @@ class ProjectController extends Controller
     {
         // dd($request->all());
 
+        $request->validate([
+            'title' => 'required|string|max:50',
+            'text'=> 'required|string',
+            'image' => 'nullable|url',
+            'link'  => 'required|url'
+        ],[
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.string' => 'Il titolo ldeve essere una stringa',
+            'title.max' => 'Il titolo puo avere 50 caratteri',
+            'image.url' => 'L\'immagine deve essere un link valido',
+            'link.required' => 'Il link è obbligatorio',
+            'link.url' => 'Il link deve essere un link valido'
+            
+        ]);
+
         $project = new Project;
         $project->fill($request->all());
         $project->slug = Project::generateSlug($project->title);
         // $project->slug = $project->id . '-' . Str::of($project->title)->slug('-');
         $project->save();
 
-        return to_route('admin.projects.show', $project);
+        return to_route('admin.projects.show', $project)
+        ->with('message_content', "Progetto $project->id creato con successo");
+
+        
     }
 
     /**
@@ -90,12 +108,28 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $request->validate([
+            'title' => 'required|string|max:50',
+            'text'=> 'required|string',
+            'image' => 'nullable|url',
+            'link'  => 'required|url'
+        ],[
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.string' => 'Il titolo ldeve essere una stringa',
+            'title.max' => 'Il titolo puo avere 50 caratteri',
+            'image.url' => 'L\'immagine deve essere un link valido',
+            'link.required' => 'Il link è obbligatorio',
+            'link.url' => 'Il link deve essere un link valido'
+            
+        ]);
+
         // $project->update($request->all()); // riempe e salva
         $project->fill($request->all()); // solo riempe senza salvare
         $project->slug = Project::generateSlug($project->title);
         $project->save();
 
-        return to_route('admin.projects.show', $project); 
+        return to_route('admin.projects.show', $project)
+        ->with('message_content', "Progetto $project->id modificato con successo");
     }
 
     /**
@@ -107,9 +141,12 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         // $project = Project::findOrFail($id);
+        $id_project = $project->id;
         $project->delete();
 
-        return to_route('admin.projects.index');        
+        return to_route('admin.projects.index')     
         // return redirect()->route('admin.projects.index');
+            ->with('messsage_type', "danger")
+            ->with('message_content', "Project $id_project eleminato con successo");
     }
 } 
