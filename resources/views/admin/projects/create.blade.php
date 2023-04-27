@@ -10,9 +10,12 @@
 
     
 @section('content')
+
+  @include('layouts.partials.errors')
+
   <section class="card">
     <div class="card-body">
-     
+
       <form action="{{ route('admin.projects.store')}}" enctype="multipart/form-data" method="POST" class="row gy-4 gx-5 ">
         @csrf
         <div class="col-6">
@@ -63,7 +66,7 @@
   </section>
 @endsection
         
-         
+// is-invalid - il bordino rosso      
         
         
         

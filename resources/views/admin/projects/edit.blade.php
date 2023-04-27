@@ -2,20 +2,26 @@
 
 @section('page-name', 'Modifica project '  .$project->title)
 
+@section('actions')
+<div class="d-flex justify-content-end my-4 mx-3">
+  <a href="{{ route('admin.projects.index')}}" class="btn btn-success text-end">Torna alla lista</a>
+</div>
+@endsection
+
 @section('content')
-  @dump($project)
+  {{-- @dump($project) --}}
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+  @include('layouts.partials.errors')
 
-<form action="{{ route('admin.projects.update', $project) }}" method="POST" class="row gy-4 gx-5 ">
+  @section('actions')
+<div class="d-flex justify-content-end my-4 mx-3">
+  <a href="{{ route('admin.projects.index')}}" class="btn btn-success text-end">Torna alla lista</a>
+</div>
+@endsection
+<div class="card ">
+  <form 
+  action="{{ route('admin.projects.update', $project) }}" method="POST" 
+  class="row gy-4 gx-5 p-4">
   @csrf
   @method('PUT')
 
@@ -73,4 +79,6 @@
     <button type="submit" class="btn btn-outline-success ms-auto">Salva</button>
   </div>
 </form>
+</div>
+
 @endsection  
