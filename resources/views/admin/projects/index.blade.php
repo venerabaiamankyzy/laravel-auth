@@ -4,13 +4,13 @@
 
 @section('actions')
 <div>
-  <a href="{{ route('admin.projects.create')}}" type="button" class="btn btn-outline-success ms-auto">Crea track</a>
+  <a href="{{ route('admin.projects.create')}}" type="button" class="btn btn-outline-success ms-auto">Create project</a>
 </div>
 
 @endsection
 
 @section('content')
-<section class="">    
+<section>    
   <div class="row my-5"> 
     <form class="d-flex mb-5" role="search">
       <input class="form-control me-sm-2" type="search" name="term" placeholder="Search">
@@ -95,16 +95,11 @@
               </a>
             </th>
 
-            
-
             <th scope="col">
               Action
-            </th>         
-
-            
-
-          </tr>         
-        </thead>
+            </th>       
+          </tr> 
+        </thead>  
 
         <tbody>
           @forelse ($projects as $project)
@@ -140,14 +135,18 @@
           @empty  
           @endforelse 
         </tbody>
-      </table>  
-    </div>
-         
+      </table>       
+    </div> 
+  </div>   
     {{ $projects->links('')}}    
+</section>      
+@endsection      
+    
+         
+    
    
-</section>
+
  
-@endsection
 
 @section('modals')
   @forelse ($projects as $project)
