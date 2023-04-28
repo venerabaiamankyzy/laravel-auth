@@ -43,6 +43,7 @@
         </main>
     </div>
 		@yield('modals')
+		@yield('scripts')
 </body>
 
 </html>
