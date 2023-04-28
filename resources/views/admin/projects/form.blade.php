@@ -25,16 +25,17 @@
       <form 
         method="POST"
         action="{{ route('admin.projects.update', $project) }}"
+        enctype="multipart/form-data"
         class="row gy-4 gx-5 p-4">
         @method('put')
         @else 
-          <form action="{{ route('admin.projects.store')}}" enctype="multipart/form-data" method="POST" class="row gy-4 gx-5 ">
+          <form action="{{ route('admin.projects.store')}}" enctype="multipart/form-data" method="POST" class="row">
         @endif
 
         @csrf
-        <div class="row m-3">
+        <div class="row mb-3">
           <div class="col-md-2 text-end">
-            <label for="title"  class="form-label me-4">Title</label>
+            <label for="title"  class="form-label">Title</label>
           </div>
 
           <div class="col-md-10">
@@ -55,13 +56,12 @@
           
         <div class="row mb-3">
           <div class="col-md-2 text-end">
-            <label for="image" class="form-label me-4">Image</label>
+            <label for="image" class="form-label">Image</label>
           </div>
           
-            <div class="col-8">
-              
+            <div class="col-md-8">
               <input 
-                type="url" class="form-control @error('image') is-invalid @enderror" id="image" name="image" value="{{ old('image', $project->image)}}"
+                type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image"
               > 
               @error('image')
                 <div class="invalid-feedback">
@@ -70,31 +70,29 @@
               @enderror
             </div>  
 
-            <div class="col-2">
-              <img src="{{ old('image', $project->image)}}" class="img-fluid" alt="">
+            <div class="col-md-2">
+              <img src="{{ $project->getImageUri() }}" class="img-fluid" alt="" id="image-preview">
             </div>
           
         </div>
             
-        <div class="row m-3">
+        <div class="row mb-3">
           <div class="col-md-2 text-end">
-              <label for="text"  class="form-label me-4">Description</label>
+            <label for="text" class="form-label">Description</label>
           </div>
           <div class="col-md-10">
-            <input type="text" 
-              class="form-control @error('text') is-invalid @enderror" 
-              id="text" 
-              name="text" 
-              value="{{ old('text', $project->text)}}">
+            <textarea name="text" id="text" class="form-control
+               @error('text') is-invalid @enderror"
+              rows="5">{{ old('text', $project->text) }}</textarea>
             @error('text')
               <div class="invalid-feedback">
-                {{ $message}}
-              </div>  
-            @enderror              
+                {{ $message }}
+              </div>
+            @enderror
           </div>
-        </div>    
+        </div>
             
-        <div class="row m-3">
+        <div class="row mb-3">
           <div class="col-md-2 text-end">
             <label for="link" class="form-label">Link</label>
           </div>
@@ -113,8 +111,8 @@
         </div>  
 
         <div class="row">
-          <div class="col-12 text-end">
-            <button type="submit" class="btn btn-outline-success ms-auto">Save</button>
+          <div class="offset-2 col-8">
+            <input type="submit" class="btn btn-outline-success" value="Save"/>
           </div>    
         </div>
       </form>  
@@ -123,7 +121,24 @@
 @endsection
      {{-- is-invalid - il bordino rosso       --}}
    
-        
+@section('scripts')
+  <script>
+    const imageInputEl = document.getElementById('image');
+    const imagePreviewEl = document.getElementById('image-preview');
+    const placeholder = imagePreviewEl.src;
+
+    imageInputEl.addEventListener('change', () => {
+      if (imageInputEl.files && imageInputEl.files[0]) {
+        const reader = new FileReader();
+        reader.readAsDataURL(imageInputEl.files[0]);
+
+        reader.onload = e => {
+          imagePreviewEl.src = e.target.result;
+        }
+      } else imagePreviewEl.src = placeholder;
+    })
+  </script>
+@endsection
         
         
       

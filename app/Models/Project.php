@@ -52,4 +52,9 @@ class Project extends Model
     // protected function getCreatedAtAttribute($value) {
     //     return date('d/m/Y H:i:s', strtotime($value));
     // }
+    
+    public function getImageUri() {
+        return $this->image ? asset('storage/' . $this->image) : 'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg';
+    }
 } 
+    

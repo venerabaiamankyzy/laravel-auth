@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -54,22 +56,33 @@ class ProjectController extends Controller
         $request->validate([
             'title' => 'required|string|max:50',
             'text'=> 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
             'link'  => 'required|url'
         ],[
             'title.required' => 'Il titolo è obbligatorio',
             'title.string' => 'Il titolo ldeve essere una stringa',
             'title.max' => 'Il titolo puo avere 50 caratteri',
-            'image.url' => 'L\'immagine deve essere un link valido',
+            'image.image' => 'Il file deve essere un\'immagine',
+            'image.mimes' => 'Le estensioni accettate per l\'immagine sono jpg,png,jpeg',
             'link.required' => 'Il link è obbligatorio',
             'link.url' => 'Il link deve essere un link valido'
             
         ]);
+        
+        $data = $request->all(); 
+        // il storage
+        if(Arr::exists( $data, 'image')) {
+            $path = Storage::put('uploads\projects', $data['image']);
+            $data['image'] = $path;
+        }
+
+        // dd($data);
 
         $project = new Project;
-        $project->fill($request->all());
+        $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         // $project->slug = $project->id . '-' . Str::of($project->title)->slug('-');
+        // $project->image = $path; // per salvare nel database il primo metodo
         $project->save();
 
         return to_route('admin.projects.show', $project)
@@ -112,20 +125,29 @@ class ProjectController extends Controller
         $request->validate([
             'title' => 'required|string|max:50',
             'text'=> 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
             'link'  => 'required|url'
         ],[
             'title.required' => 'Il titolo è obbligatorio',
             'title.string' => 'Il titolo ldeve essere una stringa',
             'title.max' => 'Il titolo puo avere 50 caratteri',
-            'image.url' => 'L\'immagine deve essere un link valido',
+            'image.image' => 'Il file deve essere un\'immagine',
+            'image.mimes' => 'Le estensioni accettate per l\'immagine sono jpg, png, jpeg',
             'link.required' => 'Il link è obbligatorio',
             'link.url' => 'Il link deve essere un link valido'
             
         ]);
 
+        $data = $request->all(); 
+        // il storage
+        if(Arr::exists( $data, 'image')) {
+            if($project->image) Storage::delete($project->image);
+            $path = Storage::put('uploads\projects', $data['image']);
+            $data['image'] = $path;
+        }
+
         // $project->update($request->all()); // riempe e salva
-        $project->fill($request->all()); // solo riempe senza salvare
+        $project->fill($data); // solo riempe senza salvare
         $project->slug = Project::generateSlug($project->title);
         $project->save();
 
@@ -143,6 +165,8 @@ class ProjectController extends Controller
     {
         // $project = Project::findOrFail($id);
         $id_project = $project->id;
+        
+        if($project->image) Storage::delete($project->image);
         $project->delete();
 
         return to_route('admin.projects.index')     

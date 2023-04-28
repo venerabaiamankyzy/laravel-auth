@@ -14,7 +14,7 @@
     {{-- @dump($project) --}}
     <div class="card-body">
       <figure class="float-end ms-5 mb-3">
-        <img src="{{ $project->image}}" alt="{{ $project->slug}}" width="200">
+        <img src="{{ $project->getImageUri() }}" alt="{{ $project->slug}}" width="200">
       
         <figcaption>
           <p class="text-muted text-secondary m-0">{{ $project->slug}}</p>
