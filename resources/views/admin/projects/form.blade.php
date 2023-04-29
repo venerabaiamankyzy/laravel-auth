@@ -53,6 +53,27 @@
             @enderror
           </div>  
         </div>
+
+        <div class="row mb-3">
+          <div class="col-md-2 text-end">
+            <label for="is_published"  class="form-label">Published</label>
+          </div>
+
+          <div class="col-md-10">
+            <input 
+            type="checkbox" 
+            class="form-check-control @error('is_published') is-invalid @enderror" @checked(old('is_published', $project->is_published))
+            value="1"
+            id="is_published" 
+            name="is_published">
+
+            @error('is_published')
+              <div class="invalid-feedback">
+                {{ $message}}
+              </div>  
+            @enderror
+          </div>  
+        </div>
           
         <div class="row mb-3">
           <div class="col-md-2 text-end">

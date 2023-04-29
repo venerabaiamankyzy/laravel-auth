@@ -57,7 +57,9 @@ class ProjectController extends Controller
             'title' => 'required|string|max:50',
             'text'=> 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg',
-            'link'  => 'required|url'
+            'link'  => 'required|url',
+            
+
         ],[
             'title.required' => 'Il titolo è obbligatorio',
             'title.string' => 'Il titolo ldeve essere una stringa',
@@ -122,11 +124,13 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        //validiamo il form
         $request->validate([
             'title' => 'required|string|max:50',
             'text'=> 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg',
-            'link'  => 'required|url'
+            'link'  => 'required|url',
+            'is_published' => 'boolean'
         ],[
             'title.required' => 'Il titolo è obbligatorio',
             'title.string' => 'Il titolo ldeve essere una stringa',
@@ -138,8 +142,14 @@ class ProjectController extends Controller
             
         ]);
 
+        //Raffiniamo i dati che c'è arrivano per salvare correttamente in DB
         $data = $request->all(); 
+        $data["slug"] = Project::generateSlug($data["title"]);
+        $data["is_published"] = $request->has("is_published") ? 1 : 0;
+        // dd($data);  
+         
         // il storage
+        //gestiamo le immagini 
         if(Arr::exists( $data, 'image')) {
             if($project->image) Storage::delete($project->image);
             $path = Storage::put('uploads\projects', $data['image']);
@@ -148,11 +158,10 @@ class ProjectController extends Controller
 
         // $project->update($request->all()); // riempe e salva
         $project->fill($data); // solo riempe senza salvare
-        $project->slug = Project::generateSlug($project->title);
         $project->save();
 
         return to_route('admin.projects.show', $project)
-        ->with('message_content', "Progetto $project->id modificato con successo");
+            ->with('message_content', "Progetto $project->id modificato con successo");
     }
 
     /**
