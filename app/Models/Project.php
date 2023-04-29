@@ -5,14 +5,15 @@ namespace App\Models;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'image', 'text', 'link'];
+    protected $fillable = ['title', 'image', 'text', 'link', 'is_published'];
 
     public function getAbstract($max = 50) {
         return substr($this->text, 0, $max). "...";
