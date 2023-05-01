@@ -228,5 +228,18 @@ class ProjectController extends Controller
             ->with('message_content', "Project $id eleminato definitivamente");
     }
 
-      
+      /**
+     * Restore the specified resource from storage.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Int $id)
+    {
+        $project =Project::where('id', $id)->onlyTrashed()->first();
+        $project->restore();
+
+        return to_route('admin.projects.index')     
+            ->with('message_content', "Project $id ripristinato");
+    }
 } 

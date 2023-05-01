@@ -137,10 +137,10 @@
                 <i class="bi bi-trash3 btn-icon"></i>
                </a> 
                 {{-- icon for reset--}}
-              {{-- <a href="#"
+              <a href="#"
                 class="text-success" data-bs-toggle="modal" data-bs-target="#restore-modal-{{ $project->id }}">
                 <i class="bi bi-arrow-repeat btn-icon fs-5"></i>
-               </a>  --}}
+               </a> 
               
             </td>   
           </tr>   
@@ -183,7 +183,34 @@
     </div>
     @empty  
   @endforelse
- 
+  {{-- modal for reset--}}
+  @forelse ($projects as $project)
+    <!-- Modal -->
+    <div class="modal modal-lg fade" id="restore-modal-{{ $project->id }}" tabindex="-1" aria-labelledby="restore-modal-{{ $project->id }}" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Conferma eliminazione!</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-start">
+            Sei sicuro di voler ripristinare il progetto "{{ $project->title }}" con ID "{{ $project->id }}"?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annulla</button>
+            
+            <form action="{{ route('admin.projects.restore', $project)}}" method="POST"> 
+                @method('put')
+                @csrf 
+                
+                <button type="submit" class="btn btn-success">Ripristina</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    @empty  
+  @endforelse
 @endsection
   
         
