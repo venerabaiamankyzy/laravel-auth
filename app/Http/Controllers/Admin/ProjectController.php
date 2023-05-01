@@ -207,4 +207,26 @@ class ProjectController extends Controller
     }
 
 
+       /**
+     * Force delete the specified resource from storage.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete(Int $id)
+    {
+        $project =Project::where('id', $id)->onlyTrashed()->first();
+
+        // $id_project = $project->id; // non ci serve piu perche passa gia id
+        
+        if($project->image) Storage::delete($project->image); //l'immagine elimino solo nel forcedelete
+        $project->forceDelete();
+
+        return to_route('admin.projects.trash')     
+        // return redirect()->route('admin.projects.index');
+            ->with('messsage_type', "danger")
+            ->with('message_content', "Project $id eleminato definitivamente");
+    }
+
+      
 } 
