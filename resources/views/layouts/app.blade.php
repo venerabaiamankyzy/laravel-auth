@@ -29,7 +29,7 @@
         <main class="container">
            
             <div class="d-flex justify-content-between my-5">
-                <h1>@yield('title')</h1>
+                <h1 class="title">@yield('title')</h1>
                     @yield('actions')
             </div>
 

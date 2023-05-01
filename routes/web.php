@@ -32,10 +32,14 @@ Route::middleware('auth')
     ->prefix('/admin') 
     ->name('admin.')
     ->group(function() {
-        Route::resource('projects', ProjectController::class)
+        Route::get('/projects/trash', [ProjectController::class, 'trash'])->name('projects.trash');
+        Route::put('/projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
+        Route::delete('/projects/{project}/force-delete', [ProjectController::class, 'forceDelete'])->name('projects.force-delete');
+        
+        Route::resource('projects', ProjectController::class);
         // -›except ([' index' ]);
         // -›only (['show', 'create', 'store', 'edit', 'update', 'destroy']);
-            ->parameters(['projects' => 'project:slug']); // si usa il slug al posto di id
+            // ->parameters(['projects' => 'project:slug']); // si usa il slug al posto di id
     });
 
 

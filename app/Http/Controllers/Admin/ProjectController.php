@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Project;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 
 class ProjectController extends Controller
@@ -26,7 +27,8 @@ class ProjectController extends Controller
         }else {
             $sort = (!empty($sort_request = $request->get('sort'))) ? $sort_request : "updated_at"; 
             $order = (!empty($order_request = $request->get('order'))) ? $order_request : "DESC"; 
-             $projects = Project::orderBy($sort, 'DESC')->paginate(8)->withQueryString();
+
+             $projects = Project::orderBy($sort, $order)->paginate(8)->withQueryString();
         }
        
         return view('admin.projects.index', compact('projects', 'sort', 'order'));
@@ -175,12 +177,34 @@ class ProjectController extends Controller
         // $project = Project::findOrFail($id);
         $id_project = $project->id;
         
-        if($project->image) Storage::delete($project->image);
         $project->delete();
 
         return to_route('admin.projects.index')     
         // return redirect()->route('admin.projects.index');
             ->with('messsage_type', "danger")
-            ->with('message_content', "Project $id_project eleminato con successo");
+            ->with('message_content', "Project $id_project spostato nel cestino");
     }
+
+
+    /**
+     * Display a listing of the trashed resource.
+     * 
+     *  @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function trash(Request $request
+    ) { 
+
+        $sort = (!empty($sort_request = $request->get('sort'))) ? $sort_request : "updated_at"; 
+        $order = (!empty($order_request = $request->get('order'))) ? $order_request : "DESC"; 
+
+
+         $projects = Project::onlyTrashed()->orderBy($sort, $order)->paginate(8);//->withQueryString()
+
+       
+        // dd($project);
+        return view('admin.projects.trash', compact('projects', 'sort', 'order'));
+    }
+
+
 } 
